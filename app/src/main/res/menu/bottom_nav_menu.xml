@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/learnFragment"
+        android:title="Learn"
+        android:icon="@drawable/ic_learn"/>
+
+    <item android:id="@+id/vocabularyFragment"
+        android:title="Vocabulary"
+        android:icon="@drawable/ic_vocab"/>
+
+    <item android:id="@+id/statisticsFragment"
+        android:title="Statistics"
+        android:icon="@drawable/ic_stats"/>
+
+</menu>

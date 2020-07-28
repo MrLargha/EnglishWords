@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/learnFragment">
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="ru.mrlargha.englishwords.ui.learn.LearnFragment"
+        android:label="Learn" />
+    <fragment
+        android:id="@+id/vocabularyFragment"
+        android:name="ru.mrlargha.englishwords.ui.vocabulary.VocabularyFragment"
+        android:label="Vocabulary"
+        tools:layout="@layout/vocabulary_fragment" />
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="ru.mrlargha.englishwords.ui.stats.StatisticsFragment"
+        android:label="Statistics"
+        tools:layout="@layout/statistics_fragment" />
+</navigation>
