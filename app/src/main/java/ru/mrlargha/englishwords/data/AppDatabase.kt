@@ -10,7 +10,11 @@ import androidx.work.WorkManager
 import ru.mrlargha.englishwords.utility.DATABASE_NAME
 import ru.mrlargha.englishwords.workers.WordsDatabaseWorker
 
-@Database(entities = [Word::class, Translation::class, Course::class], version = 3, exportSchema = false)
+@Database(
+    entities = [Word::class, Translation::class, Course::class],
+    version = 4,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
     abstract fun courseDao(): CourseDao

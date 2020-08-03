@@ -3,13 +3,15 @@ package ru.mrlargha.englishwords
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import ru.mrlargha.englishwords.data.*
 import java.io.IOException
-import java.lang.Exception
+
+// TODO Create tests for another DAO's methods
 
 @RunWith(AndroidJUnit4::class)
 class EntityRWTest {
@@ -25,7 +27,7 @@ class EntityRWTest {
 
     @After
     @Throws(IOException::class)
-    fun closeDB() {
+    fun closeDB() = runBlocking {
         wordDao.deleteAllTranslations()
         wordDao.deleteAllWords()
         db.close()
@@ -33,7 +35,7 @@ class EntityRWTest {
 
     @Test
     @Throws(Exception::class)
-    fun wordWithTranslationRW() {
+    fun wordWithTranslationRW() = runBlocking {
 
         val generatedWords = emptyList<WordWithTranslation>().toMutableList()
 
@@ -49,7 +51,7 @@ class EntityRWTest {
             wordDao.insertWordWithTranslation(word)
         }
 
-        val newWords = wordDao.getRandomWordsWithTranslations(10, 1)
+        val newWords = wordDao.getNewRandomWordsWithTranslations(10, 1)
         assert(generatedWords == newWords)
     }
 

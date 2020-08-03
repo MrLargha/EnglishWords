@@ -1,36 +1,56 @@
 package ru.mrlargha.englishwords.data
 
 import androidx.room.*
+import ru.mrlargha.englishwords.utility.RIGHT_ANSWERS_IN_ROW_LIMIT
 
 @Dao
 interface WordDao {
     @Transaction
-    @Query("SELECT * FROM words WHERE words.courseId=:course ORDER BY RANDOM() LIMIT :amount")
-    fun getRandomWordsWithTranslations(amount: Int, course: Int): List<WordWithTranslation>
+    @Query("SELECT * FROM words WHERE words.courseId=:course AND NOT words.wasShownToUser ORDER BY RANDOM() LIMIT :amount")
+    suspend fun getNewRandomWordsWithTranslations(
+        amount: Int,
+        course: Int
+    ): List<WordWithTranslation>
+
+    @Transaction
+    @Query("SELECT * FROM words WHERE words.courseId=:course AND words.wasShownToUser AND words.rightAnswersInRow < :rightAnswersInRow ORDER BY words.rightAnswersInRow ASC LIMIT :amount")
+    suspend fun getRandomWordsWithTranslationsWithErrors(
+        amount: Int,
+        course: Int,
+        rightAnswersInRow: Int = RIGHT_ANSWERS_IN_ROW_LIMIT
+    ): List<WordWithTranslation>
 
     @Query("SELECT * FROM words")
-    fun getAllWords(): List<Word>
+    suspend fun getAllWords(): List<Word>
 
     @Query("SELECT * FROM translations")
-    fun getAllTranslations(): List<Translation>
+    suspend fun getAllTranslations(): List<Translation>
+
+    @Update
+    suspend fun updateWords(vararg words: Word)
 
     @Transaction
     @Insert
-    fun insertWordWithTranslation(word: WordWithTranslation) {
+    suspend fun insertWordWithTranslation(word: WordWithTranslation) {
         insertWord(word.word)
-        word.translations.forEach(::insertTranslation)
+        word.translations.forEach { insertTranslation(it) }
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWord(word: Word)
+    suspend fun insertWord(word: Word)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTranslation(translation: Translation)
+    suspend fun insertTranslation(translation: Translation)
 
     @Query("DELETE FROM words")
-    fun deleteAllWords()
+    suspend fun deleteAllWords()
 
     @Query("DELETE FROM translations")
-    fun deleteAllTranslations()
+    suspend fun deleteAllTranslations()
 
+    @Transaction
+    suspend fun deleteAll() {
+        deleteAllTranslations()
+        deleteAllWords()
+    }
 }

@@ -1,9 +1,8 @@
 package ru.mrlargha.englishwords.data.questions
 
-interface IQuestion {
-    val rightAnswer: Answer
-    val questionText: String
+import ru.mrlargha.englishwords.data.WordWithTranslation
 
-    fun checkAnswer(giveAnswer: Answer): Boolean = rightAnswer == giveAnswer
+interface IQuestion {
+    fun getWordsWithErrors(givenAnswer: Answer?): List<WordWithTranslation>
 }
 

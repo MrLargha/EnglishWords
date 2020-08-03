@@ -1,6 +1,9 @@
 package ru.mrlargha.englishwords.data
 
-class WordsRepository private constructor(val wordDao: WordDao, val courseDao: CourseDao) {
+class WordsRepository private constructor(
+    private val wordDao: WordDao,
+    private val courseDao: CourseDao
+) {
 
     companion object {
         @Volatile
@@ -12,4 +15,13 @@ class WordsRepository private constructor(val wordDao: WordDao, val courseDao: C
                 instance ?: WordsRepository(wordDao, courseDao).also { instance = it }
             }
     }
+
+    suspend fun getNewWords(amount: Int, courseId: Int): List<WordWithTranslation> =
+        wordDao.getNewRandomWordsWithTranslations(amount, courseId)
+
+
+    suspend fun getWordsWithUserErrors(amount: Int, courseId: Int): List<WordWithTranslation> =
+        wordDao.getRandomWordsWithTranslationsWithErrors(amount, courseId)
+
+
 }
