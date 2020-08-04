@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/learnFragment"
         android:name="ru.mrlargha.englishwords.ui.learn.LearnFragment"
-        android:label="Learn" />
+        android:label="Learn">
+        <action
+            android:id="@+id/action_learnFragment_to_learnProcessFragment"
+            app:destination="@id/learnProcessFragment" />
+    </fragment>
     <fragment
         android:id="@+id/vocabularyFragment"
         android:name="ru.mrlargha.englishwords.ui.vocabulary.VocabularyFragment"
@@ -18,4 +22,13 @@
         android:name="ru.mrlargha.englishwords.ui.stats.StatisticsFragment"
         android:label="Statistics"
         tools:layout="@layout/statistics_fragment" />
+    <fragment
+        android:id="@+id/learnProcessFragment"
+        android:name="ru.mrlargha.englishwords.ui.learn_process.LearnProcessFragment"
+        android:label="fragment_learn_process"
+        tools:layout="@layout/fragment_learn_process">
+        <argument
+            android:name="courseID"
+            app:argType="integer" />
+    </fragment>
 </navigation>
