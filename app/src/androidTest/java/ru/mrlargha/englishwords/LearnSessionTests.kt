@@ -31,7 +31,7 @@ class LearnSessionTests {
         delay(3000)
         wordDao = db.wordDao()
         courseDao = db.courseDao()
-        repository = WordsRepository.getInstance(wordDao, courseDao)
+        repository = WordsRepository.getInstance(wordDao)
 
         session = LearnSessionFactory.createDefaultSession(repository.getNewWords(
             LearnSessionFactory.WORDS_FOR_SESSION,

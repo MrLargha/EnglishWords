@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class Course(
     @PrimaryKey val courseId: Int,
     val courseName: String,
-    val courseDescription: String
+    val courseDescription: String,
+    val courseProgress: Int = 0
 )

@@ -12,7 +12,7 @@ import ru.mrlargha.englishwords.workers.WordsDatabaseWorker
 
 @Database(
     entities = [Word::class, Translation::class, Course::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

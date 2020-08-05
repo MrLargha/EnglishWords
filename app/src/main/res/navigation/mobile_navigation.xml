@@ -10,7 +10,8 @@
         android:label="Learn">
         <action
             android:id="@+id/action_learnFragment_to_learnProcessFragment"
-            app:destination="@id/learnProcessFragment" />
+            app:destination="@id/learnProcessFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/vocabularyFragment"

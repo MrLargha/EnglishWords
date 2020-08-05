@@ -40,7 +40,13 @@ interface WordDao {
     suspend fun insertWord(word: Word)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWords(word: List<Word>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTranslation(translation: Translation)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTranslations(translations: List<Translation>)
 
     @Query("DELETE FROM words")
     suspend fun deleteAllWords()

@@ -3,6 +3,7 @@ package ru.mrlargha.englishwords.utility
 import android.content.Context
 import androidx.fragment.app.Fragment
 import ru.mrlargha.englishwords.data.AppDatabase
+import ru.mrlargha.englishwords.data.CourseRepository
 import ru.mrlargha.englishwords.data.WordsRepository
 import ru.mrlargha.englishwords.viewmodels.LearnHostViewModelFactory
 import ru.mrlargha.englishwords.viewmodels.LearnProcessViewModelFactory
@@ -10,7 +11,13 @@ import ru.mrlargha.englishwords.viewmodels.LearnProcessViewModelFactory
 object InjectorUtils {
     private fun getWordsRepository(context: Context): WordsRepository {
         return with(AppDatabase.getInstance(context)) {
-            WordsRepository.getInstance(wordDao(), courseDao())
+            WordsRepository.getInstance(wordDao())
+        }
+    }
+
+    private fun getCourseRepository(context: Context): CourseRepository {
+        return with(AppDatabase.getInstance(context)) {
+            CourseRepository.getInstance(courseDao())
         }
     }
 
@@ -22,7 +29,7 @@ object InjectorUtils {
     }
 
     fun provideLearnHostViewModelFactory(fragment: Fragment): LearnHostViewModelFactory {
-        return LearnHostViewModelFactory(getWordsRepository(fragment.requireContext()))
+        return LearnHostViewModelFactory(getCourseRepository(fragment.requireContext()))
     }
 }
 

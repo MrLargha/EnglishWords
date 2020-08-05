@@ -1,8 +1,7 @@
 package ru.mrlargha.englishwords.data
 
 class WordsRepository private constructor(
-    private val wordDao: WordDao,
-    private val courseDao: CourseDao
+    private val wordDao: WordDao
 ) {
 
     companion object {
@@ -10,9 +9,9 @@ class WordsRepository private constructor(
         private var instance: WordsRepository? = null
 
         @JvmStatic
-        fun getInstance(wordDao: WordDao, courseDao: CourseDao) =
+        fun getInstance(wordDao: WordDao) =
             instance ?: synchronized(this) {
-                instance ?: WordsRepository(wordDao, courseDao).also { instance = it }
+                instance ?: WordsRepository(wordDao).also { instance = it }
             }
     }
 
