@@ -1,23 +1,18 @@
 package ru.mrlargha.englishwords
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import ru.mrlargha.englishwords.data.AppDatabase
-import ru.mrlargha.englishwords.data.WordWithTranslation
 import ru.mrlargha.englishwords.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -38,17 +33,10 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         mBinding.navView.setupWithNavController(navController)
 
-        lifecycleScope.launch {
-            requestShit()
-        }
     }
 
-    private suspend fun requestShit(){
-        val db = AppDatabase.getInstance(applicationContext)
-        lateinit var words: List<WordWithTranslation>
-        withContext(Dispatchers.IO) {
-            words = db.wordDao().getNewRandomWordsWithTranslations(10, 4)
-        }
-        Log.d("TAG", "Fetched ${words.size} words")
+    override fun onSupportNavigateUp(): Boolean {
+        navController.navigateUp()
+        return true
     }
 }

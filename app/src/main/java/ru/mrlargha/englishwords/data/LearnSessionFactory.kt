@@ -3,60 +3,39 @@ package ru.mrlargha.englishwords.data
 import ru.mrlargha.englishwords.data.questions.*
 
 class LearnSessionFactory {
-    companion object {
+    private val questionList = mutableListOf<IQuestion>()
 
-        const val WORDS_FOR_SESSION = 12
-        const val TRANSLATIONS_FOR_SESSION = 12
-        const val QUESTIONS_COUNT = 9
+    fun getRequiredWordsWithTranslationsCount(): Int {
+        return questionList.sumBy { it.getRequiredWordsWithTranslations() }
+    }
 
-        fun createDefaultSession(
-            words: List<WordWithTranslation>,
-            translations: List<Translation>
-        ): LearnSession {
-            var wordsOperating = words
-            var translationsOperating = translations
-            if (wordsOperating.size < WORDS_FOR_SESSION
-                || translationsOperating.size < TRANSLATIONS_FOR_SESSION
-            )
-                throw IllegalArgumentException(
-                    "Not enough words! " +
-                            "Given ${words.size} should be $WORDS_FOR_SESSION"
-                )
+    fun getRequiredIndependentTranslations(): Int {
+        return questionList.sumBy { it.getRequiredIndependentTranslations() }
+    }
 
-            val questions = mutableListOf<IQuestion>()
-            questions.add(
-                QuestionWithMatching(
-                    wordsOperating.subList(
-                        0,
-                        QuestionWithMatching.REQUIRED_WORDS
-                    )
-                )
-            )
-            wordsOperating = wordsOperating.drop(QuestionWithMatching.REQUIRED_WORDS)
-
-            repeat(4) {
-                questions.add(QuestionWithUserInput(wordsOperating.first()))
-                wordsOperating.drop(1)
-            }
-
-            repeat(4) {
-                questions.add(
-                    QuestionWithSelectableAnswer(
-                        wordsOperating.first(),
-                        translationsOperating.subList(
-                            0,
-                            QuestionWithSelectableAnswer.REQUIRED_TRANSLATIONS
-                        )
-                    )
-                )
-                wordsOperating.drop(1)
-                translationsOperating =
-                    translationsOperating.drop(QuestionWithSelectableAnswer.REQUIRED_TRANSLATIONS)
-            }
-
-            return LearnSession(
-                questions.shuffled().zip(arrayOfNulls<Answer>(QUESTIONS_COUNT)).toMap()
-            )
+    init {
+        repeat(2) {
+            questionList.add(QuestionWithMatching())
         }
+
+        repeat(4) {
+            questionList.add(QuestionWithUserInput())
+            questionList.add(QuestionWithSelectableAnswer())
+        }
+    }
+
+    fun create(_words: List<WordWithTranslation>, _translations: List<Translation>): LearnSession {
+        val words = _words.toMutableList()
+        val translations = _translations.toMutableList()
+
+        for (question in questionList) {
+            question.acceptWordsWithTranslations(words.take(question.getRequiredWordsWithTranslations()))
+            question.acceptIndependentTranslations(translations.take(question.getRequiredIndependentTranslations()))
+
+            words.drop(question.getRequiredWordsWithTranslations())
+            translations.drop(question.getRequiredIndependentTranslations())
+        }
+
+        return LearnSession(questionList.zip(arrayOfNulls<Answer>(questionList.size)).toMap())
     }
 }

@@ -33,7 +33,7 @@ interface WordDao {
     @Insert
     suspend fun insertWordWithTranslation(word: WordWithTranslation) {
         insertWord(word.word)
-        word.translations.forEach { insertTranslation(it) }
+        insertTranslations(word.translations)
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

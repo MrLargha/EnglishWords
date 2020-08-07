@@ -33,12 +33,16 @@ class LearnSessionTests {
         courseDao = db.courseDao()
         repository = WordsRepository.getInstance(wordDao)
 
-        session = LearnSessionFactory.createDefaultSession(repository.getNewWords(
-            LearnSessionFactory.WORDS_FOR_SESSION,
-            1
-        ),
-            repository.getNewWords(LearnSessionFactory.TRANSLATIONS_FOR_SESSION, 1)
-                .map { it.translations.random() })
+        val factory = LearnSessionFactory()
+
+        session = factory.create(
+            repository.getNewWords(
+                factory.getRequiredWordsWithTranslationsCount(), 1
+            ),
+            repository.getNewWords(
+                factory.getRequiredIndependentTranslations(), 1
+            ).map { it.translations.random() }
+        )
     }
 
     @After
@@ -50,7 +54,7 @@ class LearnSessionTests {
     @Test
     @Throws(Exception::class)
     fun sizeCheck() {
-        assert(session.questionsAndAnswers.keys.size == LearnSessionFactory.QUESTIONS_COUNT)
+        assert(session.questionsAndAnswers.keys.size == 10)
     }
 
     @Test
@@ -62,7 +66,7 @@ class LearnSessionTests {
                     assert(question.answerVariants.size == 4)
                     var containsFlag = false
                     question.word.translations.forEach {
-                        if (it.translation in question.answerVariants) containsFlag = true
+                        if (it.translationText in question.answerVariants) containsFlag = true
                     }
                     assert(containsFlag)
                     assert(

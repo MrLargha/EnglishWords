@@ -30,7 +30,9 @@ class WordsDatabaseWorker(
                         val wordType = object : TypeToken<List<WordWithTranslation>>() {}.type
                         val wordsList: List<WordWithTranslation> =
                             Gson().fromJson(jsonReader, wordType)
-                        wordsList.forEach { database.wordDao().insertWordWithTranslation(it) }
+
+                        database.wordDao().insertWords(wordsList.map { it.word })
+                        database.wordDao().insertTranslations(wordsList.flatMap { it.translations })
 
                         Log.d(TAG, "Words inserted!")
                         Result.success()

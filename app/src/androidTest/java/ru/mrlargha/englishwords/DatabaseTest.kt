@@ -43,8 +43,8 @@ class EntityRWTest {
             val word = WordWithTranslation(
                 Word(i.toLong(), "room#$i", 1),
                 listOf(
-                    Translation(translatableWordId = i.toLong(), translation = "комната#$i"),
-                    Translation(translatableWordId = i.toLong(), translation = "помещение#$i")
+                    Translation(translatableWordId = i.toLong(), translationText = "комната#$i"),
+                    Translation(translatableWordId = i.toLong(), translationText = "помещение#$i")
                 )
             )
             generatedWords += word

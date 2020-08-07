@@ -2,17 +2,25 @@ package ru.mrlargha.englishwords.data.questions
 
 import ru.mrlargha.englishwords.data.WordWithTranslation
 
-class QuestionWithUserInput(
-    val word: WordWithTranslation
-) : IQuestion {
+class QuestionWithUserInput : IQuestion {
 
     companion object {
         const val REQUIRED_WORDS = 1
-        const val REQUIRED_TRANSLATIONS = 0
     }
 
-    private val rightAnswer = Answer(listOf(word.translations))
+    override fun getRequiredWordsWithTranslations() = REQUIRED_WORDS
 
-    override fun getWordsWithErrors(givenAnswer: Answer?): List<WordWithTranslation> =
-        if (givenAnswer == rightAnswer) emptyList() else listOf(word)
+    private lateinit var rightAnswer: Answer
+    lateinit var word: WordWithTranslation
+
+    override fun acceptWordsWithTranslations(words: List<WordWithTranslation>) {
+        word = words.first()
+        rightAnswer = Answer(word.translations.map { it.translationText })
+    }
+
+    override fun getWordsWithErrors(givenAnswer: Answer?): List<WordWithTranslation> {
+        givenAnswer ?: return emptyList()
+        return if (givenAnswer.answersData.none { it in rightAnswer.answersData }) listOf(word)
+        else emptyList()
+    }
 }
