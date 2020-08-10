@@ -34,4 +34,8 @@ class QuestionWithSelectableAnswer : IQuestion {
         return if (givenAnswer.answersData.none { it in rightAnswer.answersData })
             listOf(word) else emptyList()
     }
+
+    override fun getHTMLQuestionText(): String =
+        "Select exactly ONE right translation of word <b>${word.word.englishWord}</b>"
+
 }

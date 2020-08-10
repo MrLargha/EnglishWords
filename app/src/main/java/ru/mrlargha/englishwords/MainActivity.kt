@@ -1,6 +1,7 @@
 package ru.mrlargha.englishwords
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -26,9 +27,17 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.learnFragment,
                 R.id.vocabularyFragment,
-                R.id.statisticsFragment
+                R.id.statisticsFragment,
+                R.id.learnProcessFragment
             )
         )
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.learnProcessFragment -> mBinding.navView.visibility = View.GONE
+                else -> mBinding.navView.visibility = View.VISIBLE
+            }
+        }
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         mBinding.navView.setupWithNavController(navController)

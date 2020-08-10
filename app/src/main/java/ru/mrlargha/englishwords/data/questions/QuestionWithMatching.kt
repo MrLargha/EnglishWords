@@ -31,4 +31,7 @@ class QuestionWithMatching : IQuestion {
         }
         return result
     }
+
+    override fun getHTMLQuestionText(): String = "Match words with their translations"
+
 }

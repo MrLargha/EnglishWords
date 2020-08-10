@@ -28,8 +28,8 @@
         tools:layout="@layout/statistics_fragment" />
     <fragment
         android:id="@+id/learnProcessFragment"
-        android:name="ru.mrlargha.englishwords.ui.learn_process.LearnProcessFragment"
-        android:label="fragment_learn_process"
+        android:name="ru.mrlargha.englishwords.ui.learn.LearnProcessFragment"
+        android:label="Learn Process"
         tools:layout="@layout/fragment_learn_process">
         <argument
             android:name="courseID"

@@ -23,4 +23,7 @@ class QuestionWithUserInput : IQuestion {
         return if (givenAnswer.answersData.none { it in rightAnswer.answersData }) listOf(word)
         else emptyList()
     }
+
+    override fun getHTMLQuestionText(): String =
+        "Enter the translation of word <b>${word.word.englishWord}</b>"
 }
