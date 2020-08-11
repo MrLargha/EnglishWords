@@ -44,5 +44,4 @@ class LearnFragment : Fragment() {
             adapter.courses = it
         }
     }
-
 }

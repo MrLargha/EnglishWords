@@ -20,6 +20,9 @@ interface WordDao {
         rightAnswersInRow: Int = RIGHT_ANSWERS_IN_ROW_LIMIT
     ): List<WordWithTranslation>
 
+    @Query("SELECT * FROM translations ORDER BY RANDOM() LIMIT :amount")
+    suspend fun getTranslations(amount: Int): List<Translation>
+
     @Query("SELECT * FROM words")
     suspend fun getAllWords(): List<Word>
 

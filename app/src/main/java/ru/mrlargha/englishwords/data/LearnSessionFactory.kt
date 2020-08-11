@@ -1,6 +1,8 @@
 package ru.mrlargha.englishwords.data
 
-import ru.mrlargha.englishwords.data.questions.*
+import ru.mrlargha.englishwords.data.questions.Answer
+import ru.mrlargha.englishwords.data.questions.IQuestion
+import ru.mrlargha.englishwords.data.questions.QuestionWithUserInput
 
 class LearnSessionFactory {
     private val questionList = mutableListOf<IQuestion>()
@@ -15,12 +17,12 @@ class LearnSessionFactory {
 
     init {
         repeat(2) {
-            questionList.add(QuestionWithMatching())
+//            questionList.add(QuestionWithMatching())
         }
 
         repeat(4) {
             questionList.add(QuestionWithUserInput())
-            questionList.add(QuestionWithSelectableAnswer())
+//            questionList.add(QuestionWithSelectableAnswer())
         }
     }
 
@@ -36,6 +38,9 @@ class LearnSessionFactory {
             translations.drop(question.getRequiredIndependentTranslations())
         }
 
-        return LearnSession(questionList.zip(arrayOfNulls<Answer>(questionList.size)).toMap())
+        return LearnSession(
+            questionList.shuffled().zip(arrayOfNulls<Answer>(questionList.size))
+                .toMap().toMutableMap()
+        )
     }
 }
