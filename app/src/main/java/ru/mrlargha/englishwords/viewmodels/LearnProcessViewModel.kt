@@ -30,7 +30,6 @@ class LearnProcessViewModel(
             currentQuestionId = -1
             nextQuestion()
         }
-//        learnState.postValue(LearnState.IN_PROGRESS)
     }
 
     fun nextQuestion() {
@@ -69,7 +68,6 @@ class LearnProcessViewModel(
             wordsRepository.getTranslations(learnSessionFactory.getRequiredIndependentTranslations())
 
         learnSession = learnSessionFactory.create(words, translations)
-
         questionsCount = learnSession.questionsAndAnswers.keys.size
     }
 }

@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import ru.mrlargha.englishwords.data.questions.Answer
 import ru.mrlargha.englishwords.data.questions.IQuestion
 import ru.mrlargha.englishwords.data.questions.QuestionWithUserInput
 import ru.mrlargha.englishwords.databinding.FragmentQuestionWithUserInputBinding
 
 
-class QuestionWithUserInputFragment : Fragment(), IQuestionFragment {
+class QuestionWithUserInputFragment : QuestionFragment() {
 
     private lateinit var binding: FragmentQuestionWithUserInputBinding
     private lateinit var question: QuestionWithUserInput

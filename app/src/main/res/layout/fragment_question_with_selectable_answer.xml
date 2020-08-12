@@ -1,14 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.learn.QuestionWithSelectableAnswerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/questionText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Select most suitable Russian translation of word:"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@+id/word"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="casual"
+        android:text='"GIVEN_WORD"'
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/questionText" />
+
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/word">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton.Question"
+            tools:text="ANSWER_VARIANT_1" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/rb2"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton.Question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="ANSWER_VARIANT_2" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/rb3"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton.Question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="ANSWER_VARIANT_3" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/rb4"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton.Question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="ANSWER_VARIANT_4" />
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
