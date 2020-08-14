@@ -3,11 +3,12 @@ package ru.mrlargha.englishwords.data
 import ru.mrlargha.englishwords.data.questions.Answer
 import ru.mrlargha.englishwords.data.questions.IQuestion
 
-typealias QuestionAndAnswer = Pair<IQuestion, Answer?>
-
 class LearnSession(val questionsAndAnswers: MutableMap<IQuestion, Answer?>) {
-    fun getWrongAnswers(): List<QuestionAndAnswer> {
-        return questionsAndAnswers.filter { it.key.getWordsWithErrors(it.value).isNotEmpty() }
-            .toList()
-    }
+    fun getSuccessWords(): List<Word> =
+        questionsAndAnswers.flatMap {
+            it.key.getAllWords().minus(it.key.getWordsWithErrors(it.value).map { wwt -> wwt.word })
+        }
+
+    fun getWordsWithErrors(): List<Word> =
+        questionsAndAnswers.flatMap { it.key.getWordsWithErrors(it.value) }.map { it.word }
 }

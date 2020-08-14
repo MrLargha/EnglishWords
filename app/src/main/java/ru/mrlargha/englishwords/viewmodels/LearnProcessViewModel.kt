@@ -1,17 +1,20 @@
 package ru.mrlargha.englishwords.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import ru.mrlargha.englishwords.data.LearnSession
-import ru.mrlargha.englishwords.data.LearnSessionFactory
-import ru.mrlargha.englishwords.data.WordsRepository
+import ru.mrlargha.englishwords.data.*
 import ru.mrlargha.englishwords.data.questions.Answer
 import ru.mrlargha.englishwords.data.questions.IQuestion
+import java.util.*
+import kotlin.system.measureTimeMillis
 
 class LearnProcessViewModel(
     private val wordsRepository: WordsRepository,
+    private val learnSessionResultRepository: LearnSessionResultRepository,
     private val selectedCourseId: Int
 ) :
     ViewModel() {
@@ -26,9 +29,12 @@ class LearnProcessViewModel(
 
     init {
         viewModelScope.launch {
-            createQuestions()
-            currentQuestionId = -1
-            nextQuestion()
+            val timeNano = measureTimeMillis {
+                createQuestions()
+                currentQuestionId = -1
+                nextQuestion()
+            }
+            Log.d("TAG", "time: $timeNano ms")
         }
     }
 
@@ -36,10 +42,38 @@ class LearnProcessViewModel(
         currentQuestionId++
 
         if (currentQuestionId >= questionsCount) {
-            TODO("Impl")
+            finishSession()
         } else {
             currentQuestion.postValue(learnSession.questionsAndAnswers.keys.toList()[currentQuestionId])
             currentQuestionNumber.postValue(currentQuestionId + 1)
+        }
+    }
+
+    private fun finishSession() {
+        viewModelScope.launch {
+            var right: Int
+            var wrong: Int
+            wordsRepository.updateWords(
+                learnSession.getSuccessWords().also { right = it.size }.map {
+                    it.apply {
+                        rightAnswersInRow += 1
+                        wasShownToUser = true
+                    }
+                }.plus(learnSession.getWordsWithErrors().also { wrong = it.size }.map {
+                    it.apply {
+                        wasShownToUser = true
+                        rightAnswersInRow = 0
+                    }
+                })
+            )
+
+            val successPercents = 100 * right / (right + wrong)
+            val result = LearnSessionResult(
+                learnDate = Date(), relatedCourseID = selectedCourseId,
+                successPercents = successPercents
+            )
+
+            sessionResultId.postValue(learnSessionResultRepository.insertResult(result))
         }
     }
 
@@ -50,10 +84,18 @@ class LearnProcessViewModel(
     private suspend fun createQuestions() {
         val learnSessionFactory = LearnSessionFactory()
         val amountOfWords = learnSessionFactory.getRequiredWordsWithTranslationsCount()
-        val words = wordsRepository.getWordsWithUserErrors(
-            amountOfWords,
-            selectedCourseId
-        ).toMutableList()
+        val amountOfTranslations = learnSessionFactory.getRequiredIndependentTranslations()
+        val wordsFuture = viewModelScope.async {
+            wordsRepository.getWordsWithUserErrors(
+                amountOfWords,
+                selectedCourseId
+            ).toMutableList()
+        }
+
+        val translations =
+            viewModelScope.async { wordsRepository.getTranslations(amountOfTranslations) }
+
+        val words = wordsFuture.await()
 
         if (words.size < amountOfWords) {
             words.addAll(
@@ -64,10 +106,7 @@ class LearnProcessViewModel(
             )
         }
 
-        val translations =
-            wordsRepository.getTranslations(learnSessionFactory.getRequiredIndependentTranslations())
-
-        learnSession = learnSessionFactory.create(words, translations)
+        learnSession = learnSessionFactory.create(words, translations.await())
         questionsCount = learnSession.questionsAndAnswers.keys.size
     }
 }

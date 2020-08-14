@@ -28,11 +28,26 @@
         tools:layout="@layout/statistics_fragment" />
     <fragment
         android:id="@+id/learnProcessFragment"
-        android:name="ru.mrlargha.englishwords.ui.learn.LearnProcessFragment"
+        android:name="ru.mrlargha.englishwords.ui.learn.learn_process.LearnProcessFragment"
         android:label="Learn Process"
         tools:layout="@layout/fragment_learn_process">
         <argument
             android:name="courseID"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_learnProcessFragment_to_learnSessionResultFragment"
+            app:destination="@id/learnSessionResultFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@id/learnFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/learnSessionResultFragment"
+        android:name="ru.mrlargha.englishwords.ui.learn.LearnSessionResultFragment"
+        android:label="learn_session_result_fragment"
+        tools:layout="@layout/learn_session_result_fragment">
+        <argument
+            android:name="resultID"
             app:argType="integer" />
     </fragment>
 </navigation>

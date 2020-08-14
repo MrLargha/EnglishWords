@@ -4,20 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import ru.mrlargha.englishwords.utility.DATABASE_NAME
+import ru.mrlargha.englishwords.utility.DateConverter
 import ru.mrlargha.englishwords.workers.WordsDatabaseWorker
 
 @Database(
-    entities = [Word::class, Translation::class, Course::class],
-    version = 7,
+    entities = [Word::class, Translation::class, Course::class, LearnSessionResult::class],
+    version = 8,
     exportSchema = false
 )
+@TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun wordDao(): WordDao
     abstract fun courseDao(): CourseDao
+    abstract fun learnSessionResultDao(): LearnSessionResultDao
 
     companion object {
         @Volatile

@@ -1,5 +1,6 @@
 package ru.mrlargha.englishwords.data.questions
 
+import ru.mrlargha.englishwords.data.Word
 import ru.mrlargha.englishwords.data.WordWithTranslation
 
 class QuestionWithMatching : IQuestion {
@@ -31,6 +32,8 @@ class QuestionWithMatching : IQuestion {
         }
         return result
     }
+
+    override fun getAllWords(): List<Word> = words.map { it.word }
 
     override fun getHTMLQuestionText(): String = "Match words with their translations"
 

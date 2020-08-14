@@ -18,6 +18,9 @@ class WordsRepository private constructor(
     suspend fun getNewWords(amount: Int, courseId: Int): List<WordWithTranslation> =
         wordDao.getNewRandomWordsWithTranslations(amount, courseId)
 
+    suspend fun updateWords(word: List<Word>) {
+        wordDao.updateWords(*word.toTypedArray())
+    }
 
     suspend fun getWordsWithUserErrors(amount: Int, courseId: Int): List<WordWithTranslation> =
         wordDao.getRandomWordsWithTranslationsWithErrors(amount, courseId)

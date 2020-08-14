@@ -3,6 +3,7 @@ package ru.mrlargha.englishwords.data
 import ru.mrlargha.englishwords.data.questions.Answer
 import ru.mrlargha.englishwords.data.questions.IQuestion
 import ru.mrlargha.englishwords.data.questions.QuestionWithSelectableAnswer
+import ru.mrlargha.englishwords.data.questions.QuestionWithUserInput
 
 class LearnSessionFactory {
     private val questionList = mutableListOf<IQuestion>()
@@ -21,7 +22,7 @@ class LearnSessionFactory {
         }
 
         repeat(4) {
-//            questionList.add(QuestionWithUserInput())
+            questionList.add(QuestionWithUserInput())
             questionList.add(QuestionWithSelectableAnswer())
         }
     }

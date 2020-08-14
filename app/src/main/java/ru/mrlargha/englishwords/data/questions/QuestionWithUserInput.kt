@@ -1,5 +1,6 @@
 package ru.mrlargha.englishwords.data.questions
 
+import ru.mrlargha.englishwords.data.Word
 import ru.mrlargha.englishwords.data.WordWithTranslation
 
 class QuestionWithUserInput : IQuestion {
@@ -23,6 +24,8 @@ class QuestionWithUserInput : IQuestion {
         return if (givenAnswer.answersData.none { it in rightAnswer.answersData }) listOf(word)
         else emptyList()
     }
+
+    override fun getAllWords(): List<Word> = listOf(word.word)
 
     override fun getHTMLQuestionText(): String =
         "Enter the translation of word <b>${word.word.englishWord}</b>"

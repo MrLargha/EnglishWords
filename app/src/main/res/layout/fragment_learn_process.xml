@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.learn.LearnProcessFragment">
+    tools:context=".ui.learn.learn_process.LearnProcessFragment">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/questionFragmentContainer"
@@ -22,6 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:indeterminate="true"
         android:progress="55"
         app:layout_constraintEnd_toStartOf="@+id/guideline1"
         app:layout_constraintHorizontal_bias="0.0"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    tools:context=".ui.learn.QuestionWithUserInputFragment">
+    tools:context=".ui.learn.learn_process.QuestionWithUserInputFragment">
 
     <TextView
         android:id="@+id/questionText"
@@ -19,6 +19,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView

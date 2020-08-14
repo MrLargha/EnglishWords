@@ -1,6 +1,7 @@
 package ru.mrlargha.englishwords.data.questions
 
 import ru.mrlargha.englishwords.data.Translation
+import ru.mrlargha.englishwords.data.Word
 import ru.mrlargha.englishwords.data.WordWithTranslation
 
 class QuestionWithSelectableAnswer : IQuestion {
@@ -34,6 +35,8 @@ class QuestionWithSelectableAnswer : IQuestion {
         return if (givenAnswer.answersData.none { it in rightAnswer.answersData })
             listOf(word) else emptyList()
     }
+
+    override fun getAllWords(): List<Word> = listOf(word.word)
 
     override fun getHTMLQuestionText(): String =
         "Select exactly ONE right translation of word <b>${word.word.englishWord}</b>"
