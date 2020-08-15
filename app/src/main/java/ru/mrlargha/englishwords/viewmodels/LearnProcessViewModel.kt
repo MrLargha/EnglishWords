@@ -38,49 +38,6 @@ class LearnProcessViewModel(
         }
     }
 
-    fun nextQuestion() {
-        currentQuestionId++
-
-        if (currentQuestionId >= questionsCount) {
-            finishSession()
-        } else {
-            currentQuestion.postValue(learnSession.questionsAndAnswers.keys.toList()[currentQuestionId])
-            currentQuestionNumber.postValue(currentQuestionId + 1)
-        }
-    }
-
-    private fun finishSession() {
-        viewModelScope.launch {
-            var right: Int
-            var wrong: Int
-            wordsRepository.updateWords(
-                learnSession.getSuccessWords().also { right = it.size }.map {
-                    it.apply {
-                        rightAnswersInRow += 1
-                        wasShownToUser = true
-                    }
-                }.plus(learnSession.getWordsWithErrors().also { wrong = it.size }.map {
-                    it.apply {
-                        wasShownToUser = true
-                        rightAnswersInRow = 0
-                    }
-                })
-            )
-
-            val successPercents = 100 * right / (right + wrong)
-            val result = LearnSessionResult(
-                learnDate = Date(), relatedCourseID = selectedCourseId,
-                successPercents = successPercents
-            )
-
-            sessionResultId.postValue(learnSessionResultRepository.insertResult(result))
-        }
-    }
-
-    fun postAnswer(answer: Answer?) {
-        learnSession.questionsAndAnswers[checkNotNull(currentQuestion.value)] = answer
-    }
-
     private suspend fun createQuestions() {
         val learnSessionFactory = LearnSessionFactory()
         val amountOfWords = learnSessionFactory.getRequiredWordsWithTranslationsCount()
@@ -108,5 +65,69 @@ class LearnProcessViewModel(
 
         learnSession = learnSessionFactory.create(words, translations.await())
         questionsCount = learnSession.questionsAndAnswers.keys.size
+    }
+
+    fun nextQuestion() {
+        currentQuestionId++
+
+        if (currentQuestionId >= questionsCount) {
+            finishSession()
+        } else {
+            currentQuestion.postValue(learnSession.questionsAndAnswers.keys.toList()[currentQuestionId])
+            currentQuestionNumber.postValue(currentQuestionId + 1)
+        }
+    }
+
+    private fun finishSession() {
+        viewModelScope.launch {
+            val rightWords = learnSession.getSuccessWords()
+            val wrongWords = learnSession.getWordsWithErrors()
+
+            wordsRepository.updateWords(
+                rightWords.map {
+                    it.apply {
+                        rightAnswersInRow += 1
+                        wasShownToUser = true
+                    }
+                }.plus(wrongWords.map {
+                    it.apply {
+                        wasShownToUser = true
+                        rightAnswersInRow = 0
+                    }
+                })
+            )
+
+            val successPercents = 100 * rightWords.size / (rightWords.size + wrongWords.size)
+
+            val resultID = learnSessionResultRepository.insertResult(
+                LearnSessionResult(Date(), selectedCourseId, successPercents)
+            )
+
+            val learnSessionResultDetails = mutableListOf<LearnSessionResultDetail>()
+
+            rightWords.forEach {
+                learnSessionResultDetails.add(
+                    LearnSessionResultDetail(
+                        resultID, it.wordId, true
+                    )
+                )
+            }
+
+            wrongWords.forEach {
+                learnSessionResultDetails.add(
+                    LearnSessionResultDetail(
+                        resultID, it.wordId, false
+                    )
+                )
+            }
+
+            learnSessionResultRepository.insertResultDetails(learnSessionResultDetails)
+
+            sessionResultId.postValue(resultID)
+        }
+    }
+
+    fun postAnswer(answer: Answer?) {
+        learnSession.questionsAndAnswers[checkNotNull(currentQuestion.value)] = answer
     }
 }

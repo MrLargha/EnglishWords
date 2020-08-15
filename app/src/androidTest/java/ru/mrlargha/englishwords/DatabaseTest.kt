@@ -1,6 +1,7 @@
 package ru.mrlargha.englishwords
 
 import android.content.Context
+import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.runBlocking
@@ -16,13 +17,15 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class EntityRWTest {
     private lateinit var wordDao: WordDao
+    private lateinit var learnSessionResultDao: LearnSessionResultDao
     private lateinit var db: AppDatabase
 
     @Before
     fun createDB() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = AppDatabase.getInstance(context)
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         wordDao = db.wordDao()
+        learnSessionResultDao = db.learnSessionResultDao()
     }
 
     @After
@@ -53,6 +56,12 @@ class EntityRWTest {
 
         val newWords = wordDao.getNewRandomWordsWithTranslations(10, 1)
         assert(generatedWords == newWords)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun testLSRWithDetails() = runBlocking {
+        // TODO("Implement this fucking test"
     }
 
 }
