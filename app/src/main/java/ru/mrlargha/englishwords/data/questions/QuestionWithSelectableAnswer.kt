@@ -31,7 +31,7 @@ class QuestionWithSelectableAnswer : IQuestion {
     }
 
     override fun getWordsWithErrors(givenAnswer: Answer?): List<WordWithTranslation> {
-        givenAnswer ?: return emptyList()
+        givenAnswer ?: return listOf(word)
         return if (givenAnswer.answersData.none { it in rightAnswer.answersData })
             listOf(word) else emptyList()
     }

@@ -13,8 +13,9 @@ import ru.mrlargha.englishwords.utility.DateConverter
 import ru.mrlargha.englishwords.workers.WordsDatabaseWorker
 
 @Database(
-    entities = [Word::class, Translation::class, Course::class, LearnSessionResult::class],
-    version = 8,
+    entities = [Word::class, Translation::class, Course::class, LearnSessionResult::class,
+        LearnSessionResultDetail::class],
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)
@@ -39,6 +40,13 @@ abstract class AppDatabase : RoomDatabase() {
                 .addCallback(object : RoomDatabase.Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
+                        WorkManager.getInstance(context).enqueue(
+                            OneTimeWorkRequestBuilder<WordsDatabaseWorker>().build()
+                        )
+                    }
+
+                    override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
+                        super.onDestructiveMigration(db)
                         WorkManager.getInstance(context).enqueue(
                             OneTimeWorkRequestBuilder<WordsDatabaseWorker>().build()
                         )

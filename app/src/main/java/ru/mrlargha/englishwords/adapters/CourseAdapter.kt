@@ -39,7 +39,10 @@ class CourseAdapter : ListAdapter<Course, CourseAdapter.CourseViewHolder>(Course
         fun bind(course: Course) {
             binding.root.setOnClickListener {
                 val action =
-                    LearnFragmentDirections.actionLearnFragmentToLearnProcessFragment(course.courseId)
+                    LearnFragmentDirections.actionLearnFragmentToLearnProcessFragment(
+                        course.courseId,
+                        course.courseName
+                    )
                 binding.root.findNavController().navigate(action)
             }
             binding.apply {

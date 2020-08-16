@@ -11,10 +11,8 @@
         <action
             android:id="@+id/action_learnFragment_to_learnProcessFragment"
             app:destination="@id/learnProcessFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/vocabularyFragment"
@@ -40,11 +38,14 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popUpTo="@id/learnFragment" />
+        <argument
+            android:name="courseName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/learnSessionResultFragment"
         android:name="ru.mrlargha.englishwords.ui.learn.LearnSessionResultFragment"
-        android:label="learn_session_result_fragment"
+        android:label="Learn Session Results"
         tools:layout="@layout/learn_session_result_fragment">
         <argument
             android:name="resultID"

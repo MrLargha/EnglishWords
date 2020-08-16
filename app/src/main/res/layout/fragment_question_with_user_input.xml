@@ -54,7 +54,11 @@
             android:id="@+id/translationEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="1" />
+            android:imeOptions="actionDone"
+            android:lines="1"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.Guideline
