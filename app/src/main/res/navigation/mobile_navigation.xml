@@ -12,7 +12,8 @@
             android:id="@+id/action_learnFragment_to_learnProcessFragment"
             app:destination="@id/learnProcessFragment"
             app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
+            app:exitAnim="@android:anim/fade_out"
+            app:launchSingleTop="false" />
     </fragment>
     <fragment
         android:id="@+id/vocabularyFragment"

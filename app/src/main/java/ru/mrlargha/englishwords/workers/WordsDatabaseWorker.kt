@@ -15,6 +15,7 @@ import ru.mrlargha.englishwords.data.Course
 import ru.mrlargha.englishwords.data.WordWithTranslation
 import ru.mrlargha.englishwords.utility.COURSES_ASSETS_FILENAME
 import ru.mrlargha.englishwords.utility.WORDS_ASSETS_FILENAME
+import java.util.zip.ZipInputStream
 
 class WordsDatabaseWorker(
     context: Context,
@@ -25,17 +26,19 @@ class WordsDatabaseWorker(
         try {
             withContext(Dispatchers.IO) {
                 val database = AppDatabase.getInstance(applicationContext)
-                applicationContext.assets.open(WORDS_ASSETS_FILENAME).use { inputStream ->
-                    JsonReader(inputStream.reader()).use { jsonReader ->
-                        val wordType = object : TypeToken<List<WordWithTranslation>>() {}.type
-                        val wordsList: List<WordWithTranslation> =
-                            Gson().fromJson(jsonReader, wordType)
+                ZipInputStream(applicationContext.assets.open(WORDS_ASSETS_FILENAME)).apply { nextEntry }
+                    .use { inputStream ->
+                        JsonReader(inputStream.reader()).use { jsonReader ->
+                            val wordType = object : TypeToken<List<WordWithTranslation>>() {}.type
+                            val wordsList: List<WordWithTranslation> =
+                                Gson().fromJson(jsonReader, wordType)
 
-                        database.wordDao().insertWords(wordsList.map { it.word })
-                        database.wordDao().insertTranslations(wordsList.flatMap { it.translations })
+                            database.wordDao().insertWords(wordsList.map { it.word })
+                            database.wordDao()
+                                .insertTranslations(wordsList.flatMap { it.translations })
 
-                        Log.d(TAG, "Words inserted!")
-                        Result.success()
+                            Log.d(TAG, "Words inserted!")
+                            Result.success()
                     }
                 }
 
