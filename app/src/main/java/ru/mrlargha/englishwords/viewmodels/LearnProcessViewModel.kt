@@ -100,7 +100,7 @@ class LearnProcessViewModel(
             val successPercents = 100 * rightWords.size / (rightWords.size + wrongWords.size)
 
             val resultID = learnSessionResultRepository.insertResult(
-                LearnSessionResult(Date(), selectedCourseId, successPercents)
+                LearnSessionResult(Date(), selectedCourseId, successPercents, 0)
             )
 
             val learnSessionResultDetails = mutableListOf<LearnSessionResultDetail>()
@@ -112,7 +112,9 @@ class LearnProcessViewModel(
                     )
                 )
             }
-
+            rightWords.apply {
+                Log.d("TAG", "${rightWords.size}")
+            }
             wrongWords.forEach {
                 learnSessionResultDetails.add(
                     LearnSessionResultDetail(

@@ -9,6 +9,7 @@ import ru.mrlargha.englishwords.data.WordsRepository
 import ru.mrlargha.englishwords.viewmodels.LearnHostViewModelFactory
 import ru.mrlargha.englishwords.viewmodels.LearnProcessViewModelFactory
 import ru.mrlargha.englishwords.viewmodels.LearnSessionResultViewModelFactory
+import ru.mrlargha.englishwords.viewmodels.StatisticsViewModelFactory
 
 object InjectorUtils {
     private fun getWordsRepository(context: Context) =
@@ -48,6 +49,9 @@ object InjectorUtils {
             getLearnSessionResultRepository(fragment.requireContext()),
             resultID
         )
+
+    fun provideStatisticsViewModelFactory(fragment: Fragment) =
+        StatisticsViewModelFactory(getLearnSessionResultRepository(fragment.requireContext()))
 
 }
 
